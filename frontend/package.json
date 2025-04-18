@@ -11,6 +11,7 @@
     "copy-html-entry": "cp ../healthtech_patients/public/frontend/index.html ../healthtech_patients/www/frontend.html"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.0",
     "@tailwindcss/vite": "^4.1.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
