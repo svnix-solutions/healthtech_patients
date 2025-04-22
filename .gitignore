@@ -5,3 +5,6 @@
 tags
 node_modules
 __pycache__
+
+healthtech_patients/public/frontend/*
+healthtech_patients/www/frontend.html
