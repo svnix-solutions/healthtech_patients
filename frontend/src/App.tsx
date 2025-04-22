@@ -1,44 +1,43 @@
-import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import reactLogo from './assets/react.svg'
 import './App.css'
 import { FrappeProvider } from 'frappe-react-sdk'
 import { Button } from "@/components/ui/button"
+import { Home } from '@/pages/Home'
+import { About } from '@/pages/About'
+import { Login } from '@/pages/Login'
+import { Dashboard } from '@/pages/Dashboard'
+import { AuthProvider, useAuth } from '@/context/AuthContext'
 
-function Home() {
-  const [count, setCount] = useState(0)
+function Navigation() {
+  const { currentUser, logout } = useAuth()
+  
   return (
-    <div>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React + Frappe</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
-
-function About() {
-  return (
-    <div>
-      <h1>About Page</h1>
-      <p>This is the about page of your application.</p>
-    </div>
+    <nav>
+      <ul className="flex space-x-4 p-4">
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        {currentUser ? (
+          <>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Button variant="outline" onClick={logout}>
+                Logout
+              </Button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
+      </ul>
+    </nav>
   )
 }
 
@@ -46,23 +45,17 @@ function App() {
   return (
     <div className="App">
       <FrappeProvider>
-        <Router basename="/frontend">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-            </ul>
-          </nav>
-          <Button variant="destructive">Click me</Button>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </Router>
+        <AuthProvider>
+          <Router basename="/frontend">
+            <Navigation />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
       </FrappeProvider>
     </div>
   )
