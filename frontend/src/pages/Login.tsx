@@ -67,7 +67,7 @@ export function Login() {
             <CardDescription>Enter your credentials to access your account</CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
-            <CardContent>
+            <CardContent className="space-y-6">
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="username">Username</Label>
@@ -91,7 +91,7 @@ export function Login() {
                 {error && <p className="text-red-500 text-sm">{error}</p>}
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="pt-6">
               <Button type="submit" className="w-full">Login</Button>
             </CardFooter>
           </form>
