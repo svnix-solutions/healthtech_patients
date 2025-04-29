@@ -1,0 +1,38 @@
+
+export base_url=http://localhost:8000
+export auth_token=NDg2OTgyN2UzMzYwYzI2OjUxZjc5Mzk5ZTVkOWY0MQ==
+
+### Create Patient (Valid Data)
+http POST {{base_url}}/api/method/healthtech_patients.healthtech_patients.patient.create_patient \
+Authorization:"Bearer {{auth_token}}" \
+Content-Type:application/json \
+Accept:application/json \
+patient_data:='{
+    "patient_name": "Test Patient",
+    "mobile": "9876543210",
+    "gender": "Male",
+    "dob": "1990-01-01",
+    "email": "test@example.com",
+    "profile_pic": "/files/test.jpg"
+}'
+
+### Create Patient (Missing Required Fields)
+http POST {{base_url}}/api/method/healthtech_patients.healthtech_patients.patient.create_patient \
+Authorization:"Bearer {{auth_token}}" \
+Content-Type:application/json \
+Accept:application/json \
+patient_data:='{
+    "patient_name": "Test Patient",
+    "mobile": "9876543210"
+}'
+
+### Create Patient (Unauthorized)
+http POST {{base_url}}/api/method/healthtech_patients.healthtech_patients.patient.create_patient \
+Content-Type:application/json \
+Accept:application/json \
+patient_data:='{
+    "patient_name": "Test Patient",
+    "mobile": "9876543210",
+    "gender": "Male",
+    "dob": "1990-01-01"
+}'

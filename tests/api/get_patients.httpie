@@ -1,0 +1,2 @@
+
+http GET http://localhost:8000/api/method/healthtech_patients.healthtech_patients.patient.get_patients_for_customer Accept:application/json -a 2a484a6d98dc9be:97ed0b2e57eb784

@@ -173,10 +173,10 @@ app_license = "gpl-3.0"
 
 # Overriding Methods
 # ------------------------------
-#
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "healthtech_patients.event.get_events"
-# }
+override_whitelisted_methods = {
+    "healthtech_patients.healthtech_patients.patient.get_patients_for_customer": "healthtech_patients.healthtech_patients.patient.get_patients_for_customer",
+    "healthtech_patients.healthtech_patients.patient.create_patient": "healthtech_patients.healthtech_patients.patient.create_patient"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -244,3 +244,9 @@ app_license = "gpl-3.0"
 
 
 website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': 'frontend'},]
+
+# Whitelist API methods
+whitelisted_methods = {
+    "healthtech_patients.healthtech_patients.patient.get_patients_for_customer": "healthtech_patients.healthtech_patients.patient.get_patients_for_customer",
+    "healthtech_patients.healthtech_patients.patient.create_patient": "healthtech_patients.healthtech_patients.patient.create_patient"
+}
