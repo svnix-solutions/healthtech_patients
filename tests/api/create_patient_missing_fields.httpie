@@ -1,0 +1,8 @@
+
+echo -n '{
+    "patient_data": {
+        "patient_name": "Test Patient",
+        "mobile": "9876543210"
+    }
+}' | http POST :8000/api/method/healthtech_patients.healthtech_patients.patient.create_patient 
+--json --verbose -a 2a484a6d98dc9be:97ed0b2e57eb784 

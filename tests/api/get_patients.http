@@ -1,8 +1,0 @@
-### Get Patients for Current Customer
-GET {{base_url}}/api/method/healthtech_patients.healthtech_patients.patient.get_patients_for_customer
-Authorization: Bearer {{auth_token}}
-Accept: application/json
-
-### Get Patients for Current Customer (Unauthorized)
-GET {{base_url}}/api/method/healthtech_patients.healthtech_patients.patient.get_patients_for_customer
-Accept: application/json 

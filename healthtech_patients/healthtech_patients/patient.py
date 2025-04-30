@@ -29,7 +29,8 @@ def get_patients_for_customer():
                     "patient_name": patient_details.patient_name,
                     "mobile": patient_details.mobile,
                     "sex": patient_details.sex,
-                    "dob": patient_details.dob
+                    "dob": patient_details.dob,
+                    "email": patient_details.email
                 })
 
         # # Get all patients linked to this customer
