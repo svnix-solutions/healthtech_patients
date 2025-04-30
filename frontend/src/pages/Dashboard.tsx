@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { PlusCircle, UserPlus } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useFrappeGetCall } from 'frappe-react-sdk'
 
 interface Patient {
   id: string
@@ -14,11 +15,12 @@ interface Patient {
 export function Dashboard() {
   const { currentUser, isLoading } = useAuth()
   const navigate = useNavigate()
-  const [patients, setPatients] = useState<Patient[]>([])
   const [showAddPatient, setShowAddPatient] = useState(false)
   const [newPatientName, setNewPatientName] = useState("")
 
-  if (isLoading) {
+  const { data, error, isLoading: isLoadingPatients } = useFrappeGetCall<{ message: any[] }>('healthtech_patients.healthtech_patients.patient.get_patients_for_customer')
+
+  if (isLoading || isLoadingPatients) {
     return <div>Loading...</div>
   }
 
@@ -26,17 +28,9 @@ export function Dashboard() {
     navigate("/login")
   }
 
-  const handleAddPatient = () => {
-    if (newPatientName.trim()) {
-      const newPatient: Patient = {
-        id: Date.now().toString(),
-        name: newPatientName,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${newPatientName}`,
-      }
-      setPatients([...patients, newPatient])
-      setNewPatientName("")
-      setShowAddPatient(false)
-    }
+  if (error) {
+    console.error('Error fetching patients:', error)
+    return <div>Error loading patients. Please try again later.</div>
   }
 
   return (
@@ -45,15 +39,15 @@ export function Dashboard() {
         <h1 className="text-4xl font-bold mb-8">Patient Profiles</h1>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12">
-          {patients.map((patient) => (
+          {data?.message?.data.map((patient: Patient) => (
             <div
-              key={patient.id}
+              key={patient.name}
               className="group cursor-pointer"
-              onClick={() => navigate(`/patient/${patient.id}`)}
+              onClick={() => navigate(`/patient/${patient.name}`)}
             >
               <div className="relative">
                 <img
-                  src={patient.avatar}
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${patient.name}`}
                   alt={patient.name}
                   className="w-full aspect-square rounded-lg group-hover:border-4 group-hover:border-blue-500 transition-all duration-300"
                 />
@@ -103,7 +97,7 @@ export function Dashboard() {
                       Cancel
                     </Button>
                     <Button
-                      onClick={handleAddPatient}
+                      // onClick={handleAddPatient}
                       className="bg-blue-500 hover:bg-blue-600"
                     >
                       <UserPlus className="mr-2 h-4 w-4" />
@@ -118,4 +112,4 @@ export function Dashboard() {
       </div>
     </div>
   )
-} 
+}
