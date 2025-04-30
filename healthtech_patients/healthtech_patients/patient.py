@@ -73,20 +73,40 @@ def create_patient(patient_data):
         current_user = frappe.session.user
         
         # Get customer linked to current user
-        customer = frappe.get_value("Customer", {"user": current_user}, "name")
-        
-        if not customer:
+        contact = frappe.get_doc("Contact", {"user": current_user})
+        print(contact)
+
+        if not contact:
             return {
                 "status": "error",
-                "message": "No customer found for current user"
+                "message": "No contact found for current user"
             }
+        
+        # Find customer from contact links
+        contact_links = frappe.get_all(
+            "Dynamic Link",
+            filters={
+                "parenttype": "Contact",
+                "parent": contact.name,
+                "link_doctype": "Customer"
+            },
+            fields=["link_name"]
+        )
+        
+        if not contact_links:
+            return {
+                "status": "error",
+                "message": "No customer linked to the current contact"
+            }
+        
+        customer = frappe.get_doc("Customer", contact_links[0].link_name)
             
         # Parse patient data
         if isinstance(patient_data, str):
             patient_data = frappe.parse_json(patient_data)
             
         # Validate required fields
-        required_fields = ["patient_name", "mobile", "gender", "dob"]
+        required_fields = ["first_name", "last_name", "mobile", "sex", "dob"]
         for field in required_fields:
             if field not in patient_data:
                 return {
@@ -97,13 +117,15 @@ def create_patient(patient_data):
         # Create new patient
         patient = frappe.get_doc({
             "doctype": "Patient",
-            "patient_name": patient_data.get("patient_name"),
+            "first_name": patient_data.get("first_name"),
+            "last_name": patient_data.get("last_name"),
             "mobile": patient_data.get("mobile"),
             "email": patient_data.get("email"),
-            "gender": patient_data.get("gender"),
+            "sex": patient_data.get("sex"),
             "dob": patient_data.get("dob"),
-            "profile_pic": patient_data.get("profile_pic"),
-            "customer": customer
+            "invite_user": 0,
+            # "profile_pic": patient_data.get("profile_pic"),
+            "customer": customer.name
         })
         
         patient.insert(ignore_permissions=True)
@@ -113,12 +135,13 @@ def create_patient(patient_data):
             "message": "Patient created successfully",
             "data": {
                 "name": patient.name,
-                "patient_name": patient.patient_name,
+                "first_name": patient.first_name,
+                "last_name": patient.last_name,
                 "mobile": patient.mobile,
                 "email": patient.email,
-                "gender": patient.gender,
+                "sex": patient.sex,
                 "dob": patient.dob,
-                "profile_pic": patient.profile_pic
+                # "profile_pic": patient.profile_pic
             }
         }
         

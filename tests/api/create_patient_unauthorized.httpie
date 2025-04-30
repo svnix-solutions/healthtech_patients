@@ -1,8 +1,9 @@
 echo -n '{
     "patient_data": {
-        "patient_name": "Test Patient",
+        "first_name": "Test",
+        "last_name": "Patient",
         "mobile": "9876543210",
-        "gender": "Male",
+        "sex": "Male",
         "dob": "1990-01-01"
     }
 }' | 
