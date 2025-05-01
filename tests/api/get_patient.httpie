@@ -1,0 +1,3 @@
+
+echo -e '{"patient_id": "Anita Srivastava"}' | http POST http://localhost:8000/api/method/healthtech_patients.healthtech_patients.patient.get_patient
+--json --verbose -a cda8ea985cd609b:ec2ef6f058e93f5
